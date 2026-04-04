@@ -39,6 +39,39 @@ Para rodar os testes (exemplo usando pytest):
 pytest tests/
 ```
 
-## Autor
-Luiz Eduardo Gomes Costa
-Gabriel Bissacot Fraguas
+## CI/CD
+
+![CI](https://github.com/seu-usuario/desktop-tutorial/actions/workflows/ci-cd.yml/badge.svg)
+
+Este projeto utiliza GitHub Actions para pipeline de CI/CD, incluindo:
+- Execução automática de testes unitários
+- Build do pacote
+- Deploy simbólico (ajuste conforme sua estratégia)
+- Notificação por e-mail (usando secret)
+- Armazenamento de artifacts (relatório de testes e build)
+
+## Dependências
+- Python 3.11+
+- pytest (adicione ao requirements.txt)
+
+## .gitignore
+Inclua padrões como:
+- __pycache__/
+- *.pyc
+- dist/
+- .env
+
+## Prompts de IA utilizados
+- "faça o readme.md"
+- "faça o pipeline"
+- "coloque meu cadastro no teste_cadastro, meu nome é Luiz"
+- "atualiza o readme por favor"
+
+## Observações
+- O deploy está simbólico, ajuste conforme a estratégia do grupo (GitHub Releases, Docker, etc).
+- O e-mail de notificação é configurado via secret no GitHub.
+- Para cobertura de testes, adicione pytest-cov e configure o badge se desejar.
+
+---
+
+Projeto desenvolvido para a disciplina de DevOps/C214.
