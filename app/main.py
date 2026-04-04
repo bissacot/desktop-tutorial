@@ -20,5 +20,5 @@ def executar():
     print(cadastro.listar_json())
 
 
-if name == "main":
+if __name__ == "__main__":
     executar()
