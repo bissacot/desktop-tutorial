@@ -129,8 +129,8 @@ def test_pessoa_idade_negativa_erro():
 def test_pessoa_idade_zero_valida():
     """Testa se idade zero é aceita"""
     pessoa = Pessoa("Bebê", 0)
-    
-    assert pessoLucas", 25.5)
+    assert pessoa.nome == "Bebê"
+    assert pessoa.idade == 0
 
 
 def test_pessoa_tance(resultado, dict)
@@ -142,4 +142,3 @@ def test_pessoa_tance(resultado, dict)
 def test_pessoa_idade_grande():
     """Testa se idades grandes são aceitas"""
     pessoa = Pessoa("Methuselah", 969)
-    
