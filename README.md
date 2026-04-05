@@ -1,7 +1,5 @@
 # desktop-tutorial
 
-[![CI/CD Status](https://github.com/seu-usuario/desktop-tutorial/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/seu-usuario/desktop-tutorial/actions/workflows/ci-cd.yml)
-
 Projeto de exemplo para organização de um sistema desktop em Python.
 
 ## Estrutura do Projeto
@@ -26,7 +24,7 @@ Este projeto serve como base para um sistema desktop em Python, com separação 
 ## Como usar
 1. Clone o repositório:
 	```bash
-	git clone https://github.com/seu-usuario/desktop-tutorial.git
+	git clone https://github.com/bissacot/desktop-tutorial.git
 	```
 2. Instale as dependências (adicione-as no requirements.txt conforme necessário):
 	```bash
@@ -42,6 +40,8 @@ pytest tests/
 ```
 
 ## CI/CD
+
+![CI](https://github.com/bissacot/desktop-tutorial/actions/workflows/ci-cd.yml/badge.svg)
 
 Este projeto utiliza GitHub Actions para pipeline de CI/CD, incluindo:
 - Execução automática de testes unitários
@@ -61,11 +61,6 @@ Inclua padrões como:
 - dist/
 - .env
 
-## Prompts de IA utilizados
-- "faça o readme.md"
-- "faça o pipeline"
-- "coloque meu cadastro no teste_cadastro, meu nome é Luiz"
-- "atualiza o readme por favor"
 
 ## Observações
 - O deploy está simbólico, ajuste conforme a estratégia do grupo (GitHub Releases, Docker, etc).
