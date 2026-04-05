@@ -1,5 +1,7 @@
 # desktop-tutorial
 
+[![CI/CD Status](https://github.com/seu-usuario/desktop-tutorial/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/seu-usuario/desktop-tutorial/actions/workflows/ci-cd.yml)
+
 Projeto de exemplo para organização de um sistema desktop em Python.
 
 ## Estrutura do Projeto
@@ -40,8 +42,6 @@ pytest tests/
 ```
 
 ## CI/CD
-
-![CI](https://github.com/seu-usuario/desktop-tutorial/actions/workflows/ci-cd.yml/badge.svg)
 
 Este projeto utiliza GitHub Actions para pipeline de CI/CD, incluindo:
 - Execução automática de testes unitários
