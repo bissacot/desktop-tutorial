@@ -94,9 +94,81 @@ jobs:
     needs: build  # Só executa após o build
     runs-on: ubuntu-latest
     steps:
-      # 1. Envia notificação por e-mail ao final do pipeline
-      - name: Notificar por e-mail
+      # 1. Faz checkout do código
+      - name: Checkout código
+        uses: actions/checkout@v4
+      # 2. Configura Python
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      # 3. Cria um script Python para enviar notificação por e-mail
+      - name: Enviar notificação por e-mail
         env:
-          EMAIL_DESTINO: ${{ secrets.EMAIL_DESTINO }}  # Definido nas Secrets do GitHub
+          EMAIL_DESTINATARIO: ${{ secrets.EMAIL_DESTINATARIO }}  # Configurado nas Secrets
+          SENHA_EMAIL: ${{ secrets.SENHA_EMAIL }}                 # Senha de app (2FA) do GitHub
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          JOB_STATUS: ${{ job.status }}
         run: |
-          echo "Pipeline finalizado. Status: ${{ job.status }}" | mail -s "Status do Pipeline" "$EMAIL_DESTINO"
+          python << 'EOF'
+          import smtplib
+          import os
+          from datetime import datetime
+          from email.mime.text import MIMEText
+          from email.mime.multipart import MIMEMultipart
+          
+          # Variáveis de ambiente
+          email_destinatario = os.getenv("EMAIL_DESTINATARIO")
+          senha_email = os.getenv("SENHA_EMAIL")
+          github_actor = os.getenv("GITHUB_ACTOR")
+          github_repo = os.getenv("GITHUB_REPOSITORY")
+          run_id = os.getenv("GITHUB_RUN_ID")
+          status = os.getenv("JOB_STATUS")
+          
+          # Verifica se as credenciais estão configuradas
+          if not email_destinatario or not senha_email:
+              print("⚠️ Aviso: EMAIL_DESTINATARIO ou SENHA_EMAIL não configurados!")
+              exit(0)
+          
+          # Informações do pipeline
+          repo_url = f"https://github.com/{github_repo}"
+          pipeline_url = f"{repo_url}/actions/runs/{run_id}"
+          timestamp = datetime.now().strftime("%d/%m/%Y às %H:%M:%S")
+          
+          # Corpo do e-mail
+          html_content = f"""
+          <html>
+            <body style="font-family: Arial, sans-serif;">
+              <h2>📊 Status da Pipeline CI/CD</h2>
+              <p><strong>Repositório:</strong> <a href="{repo_url}">{github_repo}</a></p>
+              <p><strong>Commit por:</strong> {github_actor}</p>
+              <p><strong>Status:</strong> <span style="color: {'green' if status == 'success' else 'red'}; font-weight: bold;">{status.upper()}</span></p>
+              <p><strong>Data/Hora:</strong> {timestamp}</p>
+              <p><strong>Pipeline:</strong> <a href="{pipeline_url}">Ver detalhes</a></p>
+              <hr>
+              <p style="font-size: 12px; color: #666;">Esta é uma notificação automática gerada pelo GitHub Actions.</p>
+            </body>
+          </html>
+          """
+          
+          # Configurar e-mail
+          msg = MIMEMultipart("alternative")
+          msg["Subject"] = f"🔔 Pipeline {'SUCESSO' if status == 'success' else 'FALHOU'}: {github_repo}"
+          msg["From"] = email_destinatario
+          msg["To"] = email_destinatario
+          msg.attach(MIMEText(html_content, "html"))
+          
+          # Enviar e-mail via SMTP do Gmail
+          try:
+              server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10)
+              server.login(email_destinatario, senha_email)
+              server.sendmail(email_destinatario, email_destinatario, msg.as_string())
+              server.quit()
+              print(f"✅ E-mail enviado com sucesso para {email_destinatario}")
+          except Exception as error:
+              print(f"❌ Erro ao enviar e-mail: {error}")
+              exit(1)
+          EOF
+        continue-on-error: true  # Não falha o pipeline se o e-mail não for enviado
